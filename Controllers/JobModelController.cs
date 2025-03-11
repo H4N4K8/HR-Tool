@@ -49,9 +49,9 @@ namespace HR_Tool.Controllers
         // GET: JobModel/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
-            ViewData["CompetencyID"] = new SelectList(_context.Competency, "CompetencyID", "CompetencyID");
-            ViewData["ProficiencyID"] = new SelectList(_context.Proficiencies, "ProficiencyID", "ProficiencyID");
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "CategoryID", "CategoryName");
+            ViewData["CompetencyID"] = new SelectList(_context.Set<Competency>(), "CompetencyID", "CompetencyName");
+            ViewData["ProficiencyID"] = new SelectList(_context.Set<Proficiency>(), "ProficiencyID", "ProficiencyLevel");
             return View();
         }
 
@@ -68,9 +68,9 @@ namespace HR_Tool.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", jobModel.CategoryID);
-            ViewData["CompetencyID"] = new SelectList(_context.Competency, "CompetencyID", "CompetencyID", jobModel.CompetencyID);
-            ViewData["ProficiencyID"] = new SelectList(_context.Proficiencies, "ProficiencyID", "ProficiencyID", jobModel.ProficiencyID);
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "CategoryID", "CategoryName", jobModel.CategoryID);
+            ViewData["CompetencyID"] = new SelectList(_context.Set<Competency>(), "CompetencyID", "CompetencyName", jobModel.CompetencyID);
+            ViewData["ProficiencyID"] = new SelectList(_context.Set<Proficiency>(), "ProficiencyID", "ProficiencyLevel", jobModel.ProficiencyID);
             return View(jobModel);
         }
 
@@ -87,9 +87,9 @@ namespace HR_Tool.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", jobModel.CategoryID);
-            ViewData["CompetencyID"] = new SelectList(_context.Competency, "CompetencyID", "CompetencyID", jobModel.CompetencyID);
-            ViewData["ProficiencyID"] = new SelectList(_context.Proficiencies, "ProficiencyID", "ProficiencyID", jobModel.ProficiencyID);
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "CategoryID", "CategoryName", jobModel.CategoryID);
+            ViewData["CompetencyID"] = new SelectList(_context.Set<Competency>(), "CompetencyID", "CompetencyName", jobModel.CompetencyID);
+            ViewData["ProficiencyID"] = new SelectList(_context.Set<Proficiency>(), "ProficiencyID", "ProficiencyLevel", jobModel.ProficiencyID);
             return View(jobModel);
         }
 
@@ -125,9 +125,9 @@ namespace HR_Tool.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", jobModel.CategoryID);
-            ViewData["CompetencyID"] = new SelectList(_context.Competency, "CompetencyID", "CompetencyID", jobModel.CompetencyID);
-            ViewData["ProficiencyID"] = new SelectList(_context.Proficiencies, "ProficiencyID", "ProficiencyID", jobModel.ProficiencyID);
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "CategoryID", "CategoryName", jobModel.CategoryID);
+            ViewData["CompetencyID"] = new SelectList(_context.Set<Competency>(), "CompetencyID", "CompetencyName", jobModel.CompetencyID);
+            ViewData["ProficiencyID"] = new SelectList(_context.Set<Proficiency>(), "ProficiencyID", "ProficiencyLevel", jobModel.ProficiencyID);
             return View(jobModel);
         }
 
