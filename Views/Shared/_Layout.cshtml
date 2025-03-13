@@ -26,7 +26,7 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="JobModel" asp-action="Index">Postings</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Competency" asp-action="Index">Compentencies</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Competency" asp-action="Index">Competencies</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Proficiency" asp-action="Index">Proficiencies</a>
@@ -35,10 +35,36 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
                         </li>
                     </ul>
+
+                    <!-- Add another unordered list for the login/register at the end -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- 'ms-auto' for left margin auto, pushes this section to the right -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- If the user is logged in -->
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="#">Hello, @User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="/Account/Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- If the user is not logged in -->
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="/Account/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="/Account/Register">Register</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
