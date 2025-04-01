@@ -1,0 +1,56 @@
+﻿@model HR_Tool.Models.SummaryViewModel.IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="SelectedCompetencyId" class="control-label">Competency</label>
+        <select asp-for="SelectedCompetencyId" class="form-control">
+            <option value="">-- Select Competency --</option>
+            @foreach (var competency in Model.CompetencyList)
+            {
+                <option value="@competency.CompetencyID">@competency.CompetencyName</option>
+            }
+        </select>
+        <span asp-validation-for="SelectedCompetencyId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedProficiencyId" class="control-label">Proficiency</label>
+        <select asp-for="SelectedProficiencyId" class="form-control">
+            <option value="">-- Select Proficiency --</option>
+            @foreach (var proficiency in Model.ProficiencyList)
+            {
+                <option value="@proficiency.ProficiencyID">@proficiency.ProficiencyLevel</option>
+            }
+        </select>
+        <span asp-validation-for="SelectedProficiencyId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add to List</button>
+</form>
+
+<h3>Selected Competency-Proficiency List</h3>
+<ul>
+    @if (Model.SelectedCompetencyProficiencyList.Any())
+    {
+        foreach (var item in Model.SelectedCompetencyProficiencyList)
+        {
+            <li>
+                @item
+                <form method="post" action="@Url.Action("DeleteItem", "Summary")" style="display:inline-block;">
+                    <input type="hidden" name="itemToDelete" value="@item" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </li>
+        }
+    }
+    else
+    {
+        <p>No selections made yet.</p>
+    }
+</ul>
