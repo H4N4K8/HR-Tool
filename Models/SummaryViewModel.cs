@@ -1,21 +1,24 @@
-﻿namespace HR_Tool.Models
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+
+namespace HR_Tool.Models
 {
     public class SummaryViewModel
     {
-        public class IndexViewModel
-        {
-            // These will be used for the dropdown selections
-            public List<Competency> CompetencyList { get; set; }
-            public List<Proficiency> ProficiencyList { get; set; }
+        public List<Competency> competency { get; set; } = new List<Competency>();
+        public List<Proficiency> proficiency { get; set; } = new List<Proficiency>();
+        public string? Description { get; set; }
+        public bool Archived { get; set; } = false;
+        public bool Active { get; set; } = true;
 
-            // These represent the current selections from the form
-            public string? SelectedCompetencyId { get; set; }
-            public string? SelectedProficiencyId { get; set; }
+        // New: List of selected competency/proficiency pairs
+        public List<SelectedItem> SelectedItems { get; set; } = new();
+    }
 
-            // These are the selected values to be displayed on the page
-            public string? SelectedCompetencyName { get; set; }
-            public string? SelectedProficiencyLevel { get; set; }
-            public List<string> SelectedCompetencyProficiencyList { get; set; } = new List<string>();
-        }
+    public class SelectedItem
+    {
+        public string? competency { get; set; }
+        public string? proficiency { get; set; }
     }
 }

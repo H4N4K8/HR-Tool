@@ -1,56 +1,53 @@
-﻿@model HR_Tool.Models.SummaryViewModel.IndexViewModel
+﻿@model HR_Tool.Models.SummaryViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h1>Summary Index</h1>
 
-<form method="post">
+<form asp-action="Preview" method="post">
+    <!-- Competency Dropdown -->
     <div class="form-group">
-        <label asp-for="SelectedCompetencyId" class="control-label">Competency</label>
-        <select asp-for="SelectedCompetencyId" class="form-control">
-            <option value="">-- Select Competency --</option>
-            @foreach (var competency in Model.CompetencyList)
-            {
-                <option value="@competency.CompetencyID">@competency.CompetencyName</option>
-            }
+        <label asp-for="competency" class="control-label">Competency</label>
+        <select id="compt" asp-for="competency" class="form-control" asp-items="ViewBag.CompetencyID">
+            <option value="">-- Select Competency --</option> <!-- Optional: Default option -->
         </select>
-        <span asp-validation-for="SelectedCompetencyId" class="text-danger"></span>
+        <span asp-validation-for="competency" class="text-danger"></span>
     </div>
 
+    <!-- Proficiency Dropdown -->
     <div class="form-group">
-        <label asp-for="SelectedProficiencyId" class="control-label">Proficiency</label>
-        <select asp-for="SelectedProficiencyId" class="form-control">
-            <option value="">-- Select Proficiency --</option>
-            @foreach (var proficiency in Model.ProficiencyList)
-            {
-                <option value="@proficiency.ProficiencyID">@proficiency.ProficiencyLevel</option>
-            }
+        <label asp-for="proficiency" class="control-label">Proficiency</label>
+        <select id="prof" asp-for="proficiency" class="form-control" asp-items="ViewBag.ProficiencyID">
+            <option value="">-- Select Proficiency --</option> <!-- Optional: Default option -->
         </select>
-        <span asp-validation-for="SelectedProficiencyId" class="text-danger"></span>
+        <span asp-validation-for="proficiency" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Add to List</button>
+    <!-- Add Button to Append to List -->
+    <button type="button" id="addButton" class="btn btn-secondary">Add</button>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+    <!-- Add a hidden input to store selected items -->
+    <input type="hidden" id="selectedItemsJson" name="SelectedItemsJson" />
+
 </form>
 
-<h3>Selected Competency-Proficiency List</h3>
-<ul>
-    @if (Model.SelectedCompetencyProficiencyList.Any())
-    {
-        foreach (var item in Model.SelectedCompetencyProficiencyList)
-        {
-            <li>
-                @item
-                <form method="post" action="@Url.Action("DeleteItem", "Summary")" style="display:inline-block;">
-                    <input type="hidden" name="itemToDelete" value="@item" />
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </li>
-        }
-    }
-    else
-    {
-        <p>No selections made yet.</p>
-    }
+<!-- Unordered List to Display Added Items -->
+<h3>Selected Items:</h3>
+<ul id="selectedItemsList">
+    <!-- List items will appear here -->
 </ul>
+
+<!-- Link to the External JavaScript File -->
+@section Scripts {
+    <script>
+        var competencies = @Html.Raw(Json.Serialize(ViewBag.CompetencyID));
+        var proficiencies = @Html.Raw(Json.Serialize(ViewBag.ProficiencyID));
+        console.log("Competencies:", competencies);
+        console.log("Proficiencies:", proficiencies);
+    </script>
+    <script src="~/js/Summary.js"></script>
+}

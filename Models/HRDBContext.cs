@@ -200,7 +200,7 @@ namespace HR_Tool.Models
             modelBuilder.Entity<Proficiency>().HasData(
                 new Proficiency { ProficiencyID = "1", ProficiencyLevel = "Advanced" },
                 new Proficiency { ProficiencyID = "2", ProficiencyLevel = "Basic" },
-                new Proficiency { ProficiencyID = "3", ProficiencyLevel = "Basic" },
+                new Proficiency { ProficiencyID = "3", ProficiencyLevel = "Basic+" },
                 new Proficiency { ProficiencyID = "4", ProficiencyLevel = "" },
                 new Proficiency { ProficiencyID = "5", ProficiencyLevel = "Proficient" },
                 new Proficiency { ProficiencyID = "6", ProficiencyLevel = "Proficient+" }

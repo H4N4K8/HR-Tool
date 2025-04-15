@@ -1,0 +1,49 @@
+﻿@model HR_Tool.Models.SummaryViewModel
+
+@{
+    ViewData["Title"] = "Preview";
+}
+
+<h2>Preview</h2>
+
+<!-- Quill Editor -->
+<div id="editor" style="height: 300px;"></div>
+
+<!-- Your form (optional save) -->
+<form method="post" asp-action="SaveFinal">
+    <input type="hidden" name="FinalContent" id="FinalContent" />
+    <button type="submit" class="btn btn-success mt-3">Save</button>
+</form>
+
+@section Scripts {
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        // Add content to Quill editor
+        const content = `
+            <h3>Selected Items:</h3>
+            <ul>
+        @foreach (var item in Model.SelectedItems)
+        {
+            <text>
+                            <li><strong>Competency:</strong> @item.competency | <strong>Proficiency:</strong> @item.proficiency</li>
+            </text>
+        }
+            </ul>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Active:</strong> @Model.Active</p>
+            <p><strong>Archived:</strong> @Model.Archived</p>
+        `;
+
+        quill.root.innerHTML = content;
+
+        // Optional: Save editor content when form is submitted
+        document.querySelector("form").addEventListener("submit", function () {
+            document.getElementById("FinalContent").value = quill.root.innerHTML;
+        });
+    </script>
+}
