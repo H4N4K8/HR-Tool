@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register Identity DB (separate from HR DB)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDb")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HRDBContext")));
 
 // Add Identity services with roles
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
