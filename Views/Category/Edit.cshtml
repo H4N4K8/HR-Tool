@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<head>
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+</head>
 
 <h1>Edit</h1>
 
 <h4>Category</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="box">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CategoryID" />
@@ -19,15 +22,16 @@
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input class="btn2" type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn2" asp-action="Index">Back to List</a>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
