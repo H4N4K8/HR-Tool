@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Create";
 }
+<head>
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+</head>
 
 <h1>Create</h1>
 
 <h4>Competency</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="box">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,15 +26,16 @@
                 <span asp-validation-for="CompetencyName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn3 btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn2" asp-action="Index">Back to List</a>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

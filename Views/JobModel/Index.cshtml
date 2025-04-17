@@ -3,63 +3,67 @@
 @{
     ViewData["Title"] = "Index";
 }
+<head>
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+</head>
 
-<h1>Index</h1>
+<h1>Postings</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn2" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Archived)
             </th>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Active)
             </th>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Competency)
             </th>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Proficiencies)
             </th>
-            <th>
+            <th style="background-color:#03B28B; font-size:1.2em;">
                 @Html.DisplayNameFor(model => model.Categories)
             </th>
-            <th></th>
+            <th style="background-color:#03B28B;"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Archived)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Competency.CompetencyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proficiencies.ProficiencyLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categories.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Archived)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Competency.CompetencyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Proficiencies.ProficiencyLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categories.CategoryName)
+                </td>
+                <td class="btnCol">
+                    <a class="btn" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    <a class="btn" asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    <a class="btn" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
