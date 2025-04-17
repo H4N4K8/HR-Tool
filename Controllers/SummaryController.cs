@@ -15,54 +15,22 @@ namespace HR_Tool.Controllers
         }
 
         // GET: Summary/Index
-        public async Task<IActionResult> Index(SummaryViewModel summaryModel)
+        public async Task<IActionResult> Index()
         {
             var competencies = await _context.Competency.ToListAsync();
             var proficiencies = await _context.Proficiencies.ToListAsync();
 
-            if (competencies == null || proficiencies == null)
-            {
-                // Handle the case where the lists are null or empty
-                return View("Error"); // Or return a default view with a message.
-            }
+            var jobModels = await _context.JobModel
+                .Include(j => j.Competency)
+                .Include(j => j.Proficiencies)
+                .ToListAsync();
 
-            // Populate ViewBag with the list data
-            ViewBag.CompetencyID = new SelectList(competencies, "CompetencyID", "CompetencyName");
-            ViewBag.ProficiencyID = new SelectList(proficiencies, "ProficiencyID", "ProficiencyLevel");
+            ViewBag.CompetencyList = new SelectList(competencies, "CompetencyID", "CompetencyName");
+            ViewBag.ProficiencyList = new SelectList(proficiencies, "ProficiencyID", "ProficiencyLevel");
 
-            var data = new SummaryViewModel
-            {
-                competency = competencies,
-                proficiency = proficiencies,
-                Description = summaryModel?.Description,
-                Active = summaryModel?.Active ?? true, // Defaulting to true if null
-                Archived = summaryModel?.Archived ?? false // Defaulting to false if null
-            };
+            ViewBag.JobModels = jobModels;
 
-            return View(data);
-        }
-
-        [HttpPost]
-        public IActionResult Preview(string SelectedItemsJson, string? Description, bool Active, bool Archived)
-        {
-            var selectedItems = new List<SelectedItem>();
-
-            // Deserialize the SelectedItemsJson to List<SelectedItem>
-            if (!string.IsNullOrEmpty(SelectedItemsJson))
-            {
-                selectedItems = System.Text.Json.JsonSerializer.Deserialize<List<SelectedItem>>(SelectedItemsJson);
-            }
-
-            // Prepare the model with selected items and other properties
-            var model = new SummaryViewModel
-            {
-                SelectedItems = selectedItems, // Ensure this is populated with items
-                Description = Description,
-                Active = Active,
-                Archived = Archived
-            };
-
-            return View(model);
+            return View(new SummaryViewModel());
         }
     }
 }

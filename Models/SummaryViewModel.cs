@@ -6,19 +6,16 @@ namespace HR_Tool.Models
 {
     public class SummaryViewModel
     {
-        public List<Competency> competency { get; set; } = new List<Competency>();
-        public List<Proficiency> proficiency { get; set; } = new List<Proficiency>();
+        public string? CompetencyID { get; set; }
+        public string? ProficiencyID { get; set; }
+        public string? CompetencyName { get; set; }
+        public string? ProficiencyLevel { get; set; }
         public string? Description { get; set; }
-        public bool Archived { get; set; } = false;
-        public bool Active { get; set; } = true;
+        public string? Category { get; set; }
+        public bool Active { get; set; }
+        public bool Archived { get; set; }
 
-        // New: List of selected competency/proficiency pairs
-        public List<SelectedItem> SelectedItems { get; set; } = new();
-    }
-
-    public class SelectedItem
-    {
-        public string? competency { get; set; }
-        public string? proficiency { get; set; }
+        // For transferring multiple selected items
+        public List<SummaryViewModel> SelectedSummaries { get; set; } = new();
     }
 }
