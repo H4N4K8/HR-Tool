@@ -1,26 +1,24 @@
-﻿using HR_Tool.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HR_Tool.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HR_Tool.Controllers
 {
-public class SummaryController : Controller
-{
-    private readonly HRDBContext _context;
-
-    public SummaryController(HRDBContext context)
+    public class SummaryController : Controller
     {
-        _context = context;
-    }
+        private readonly HRDBContext _context;
 
-    // GET: Summary/Index
+        public SummaryController(HRDBContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Summary/Index
         public async Task<IActionResult> Index()
-    {
-        // Fetching data from the database
-        var competencies = await _context.Competency.ToListAsync();
-        var proficiencies = await _context.Proficiencies.ToListAsync();
+        {
+            var competencies = await _context.Competency.ToListAsync();
+            var proficiencies = await _context.Proficiencies.ToListAsync();
 
             var jobModels = await _context.JobModel
                 .Include(j => j.Competency)
@@ -34,10 +32,5 @@ public class SummaryController : Controller
 
             return View(new SummaryViewModel());
         }
-
-        // Store the updated list back into TempData
-        TempData["SelectedCompetencyProficiencyList"] = selectedList;
-
-        return RedirectToAction("Index");
     }
 }
