@@ -1,0 +1,54 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <section>
+            <h3>Login with Google</h3>
+            <hr />
+            @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div>
+                    <p>
+                        No external login providers configured. <br />
+                        See <a href="https://go.microsoft.com/fwlink/?LinkID=532715" target="_blank">how to configure external login providers</a>.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form id="external-login-form" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div class="d-grid gap-2">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn btn-outline-primary btn-lg w-100 mb-2"
+                                    name="provider"
+                                    value="@provider.Name"
+                                    title="Log in using your @provider.DisplayName account">
+                                @if (provider.Name == "Google")
+                                {
+                                    <i class="bi bi-google"></i> <span>Log in with Google</span>
+                                }
+                                else
+                                {
+                                    <span>Log in with @provider.DisplayName</span>
+                                }
+                            </button>
+                        }
+
+                    </div>
+                </form>
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
