@@ -11,6 +11,12 @@ builder.Services.AddDbContext<HRDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("HRDBContext")));
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Lax; // Or Strict if needed
+    options.Secure = CookieSecurePolicy.Always;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +29,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCookiePolicy();
 
 app.UseRouting();
 

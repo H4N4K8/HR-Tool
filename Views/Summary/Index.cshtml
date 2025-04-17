@@ -1,0 +1,132 @@
+﻿@model HR_Tool.Models.SummaryViewModel
+
+@{
+    ViewData["Title"] = "Summary Builder";
+}
+
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+</head>
+<style>
+    .btn-hover-effect {
+        transition: all 0.3s ease;
+    }
+
+    .btn-hover-effect:hover {
+        background-color: #17a2b8; /* A lighter shade of the original */
+        color: white;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.03);
+    }
+</style>
+
+<h2>Select Competency & Proficiency</h2>
+
+<div class="form-group">
+    <label asp-for="CompetencyID">Competency</label>
+    <select id="CompetencyID" name="CompetencyID" asp-items="ViewBag.CompetencyList" class="form-control">
+    <option value="">-- Select Competency --</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="ProficiencyID">Proficiency</label>
+    <select id="ProficiencyID" name="ProficiencyID" asp-for="ProficiencyID" asp-items="ViewBag.ProficiencyList" class="form-control">
+        <option value="">-- Select Proficiency --</option>
+    </select>
+</div>
+
+<p type="hidden" id="error" style="color:red;"></p>
+
+<button type="button" id="addButton" class="btn btn-primary mt-2 btn-hover-effect" style="background-color:forestgreen">Add</button>
+
+<hr />
+<h3 class="mt-4">Generated Summary</h3>
+<div id="editor" style="height: 300px;"></div>
+<button type="button" onclick="downloadAsText()" class="btn btn-primary mt-3 btn-hover-effect" style="background-color:forestgreen">Download as Text</button>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addBtn = document.getElementById("addButton");
+            const competencySelect = document.getElementById("CompetencyID");
+            const proficiencySelect = document.getElementById("ProficiencyID");
+            const form = document.querySelector("form");
+
+            // Make sure all necessary elements exist
+            if (!addBtn || !competencySelect || !proficiencySelect) {
+                console.error("Required elements not found in the DOM.");
+                return;
+            }
+
+            // Fetch jobModels directly from ViewBag in the script
+            const jobModels = @Html.Raw(Json.Serialize(ViewBag.JobModels));
+
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': '1' }, { 'header': '2' }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['bold', 'italic'],
+                        ['link'],
+                        ['blockquote'],
+                        [{ 'align': [] }],
+                        ['image', 'code-block']
+                    ]
+                }
+            });
+
+            addBtn.addEventListener("click", function () {
+                document.getElementById("error").innerHTML="";
+                const competencyID = competencySelect.value;
+                const proficiencyID = proficiencySelect.value;
+
+                if (!competencyID || !proficiencyID) {
+                    document.getElementById("error").innerHTML="Please select a competency AND a proficiency.";
+                    return;
+                }
+
+                const match = jobModels.find(j =>
+                    j.competencyID.toString() === competencyID &&
+                    j.proficiencyID.toString() === proficiencyID
+                );
+
+                if (!match || !match.competency || !match.proficiencies) {
+                    document.getElementById("error").innerHTML="Could not find a matching competency & proficiency pair.";
+                    return;
+                }
+
+                const competencyName = match.competency.competencyName;
+                const proficiencyLevel = match.proficiencies.proficiencyLevel;
+                const description = match.description;
+                const activeStatus = match.active ? "Yes" : "No";
+                const archivedStatus = match.archived ? "Yes" : "No";
+
+                const content =
+                    `<p><strong>Competency:</strong> ${competencyName}</p>
+                    <p><strong>Proficiency:</strong> ${proficiencyLevel}</p>
+                    <p><strong>Description:</strong> ${description}</p>
+                    <p><strong>Active:</strong> ${activeStatus}</p>
+                    <p><strong>Archived:</strong> ${archivedStatus}</p>
+                    <hr />`;
+
+                quill.root.innerHTML += content;
+            });
+        });
+
+        function downloadAsText() {
+            const quillContent = document.querySelector('#editor .ql-editor').innerText; // get plain text
+            const blob = new Blob([quillContent], { type: "text/plain;charset=utf-8" });
+
+            // Create a download link and click it programmatically
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "summary.txt";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+}
