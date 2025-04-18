@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HR_Tool.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HR_Tool.Controllers
 {
@@ -15,6 +16,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: Summary/Index
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> Index()
         {
             var competencies = await _context.Competency.ToListAsync();

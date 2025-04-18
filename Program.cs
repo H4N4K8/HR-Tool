@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using HR_Tool.Data;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,20 +16,36 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HRDBContext")));
 
 // Add Identity services with roles
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; 
+    options.SignIn.RequireConfirmedAccount = false;
 })
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+.AddDefaultUI(); // This render Login/Register UI pages
 
 //  Register HR database
 builder.Services.AddDbContext<HRDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HRDBContext")));
 
-// Add MVC
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // required for Identity UI
+// Add MVC 
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
+// required for Identity UI
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Login");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Register");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/ForgotPassword");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/ResetPassword");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/AccessDenied");
+});
 
 // Add Google authentication
 builder.Services.AddAuthentication()

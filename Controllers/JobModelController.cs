@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HR_Tool.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HR_Tool.Controllers
 {
@@ -47,6 +48,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: JobModel/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "CategoryID", "CategoryName");
@@ -75,6 +77,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: JobModel/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -132,6 +135,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: JobModel/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
