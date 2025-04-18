@@ -23,9 +23,9 @@ namespace HR_Tool.Data
                 }
             }
 
-            // Optional: Create default Admin user
+            // Create or update default Admin user
             var adminEmail = "admin@hrtool.com";
-            var adminPassword = "Admin@123";
+            var adminPassword = "Gp!92xZ@mvQ1"; // Change this to whatever password you want
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
@@ -34,7 +34,7 @@ namespace HR_Tool.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true // Optional: bypass confirmation
+                    EmailConfirmed = true
                 };
 
                 var result = await userManager.CreateAsync(user, adminPassword);
@@ -42,7 +42,18 @@ namespace HR_Tool.Data
                 {
                     await userManager.AddToRoleAsync(user, "Admin");
                 }
-               
+            }
+            else
+            {
+                // Reset password if user already exists
+                var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+                await userManager.ResetPasswordAsync(adminUser, token, adminPassword);
+
+                // Ensure the user is in the Admin role
+                if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
             }
         }
     }

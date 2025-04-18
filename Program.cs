@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using HR_Tool.Data;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,21 +15,43 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HRDBContext")));
 
-// Add Identity services with roles
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+// Add Identity services with roles and UI
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; 
+    options.SignIn.RequireConfirmedAccount = false;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Set login and access denied redirect paths
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
 
 //  Register HR database
 builder.Services.AddDbContext<HRDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HRDBContext")));
 
 // Add MVC
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // required for Identity UI
+builder.Services.AddControllersWithViews(options =>
+    {
+        var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
+    });
+
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Login");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/Register");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/ForgotPassword");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/ResetPassword");
+    options.Conventions.AllowAnonymousToAreaPage("Identity", "/Account/AccessDenied");
+});
+// required for Identity UI
 
 // Add Google authentication
 builder.Services.AddAuthentication()
@@ -41,7 +65,6 @@ builder.Services.AddAuthentication()
     });
 
 builder.Services.AddTransient<IEmailSender, DummyEmailSender>();
-
 
 var app = builder.Build();
 
@@ -78,3 +101,4 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+

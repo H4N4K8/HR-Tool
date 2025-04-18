@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HR_Tool.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HR_Tool.Controllers
 {
@@ -43,6 +44,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: Competency/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -65,6 +67,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: Competency/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -116,6 +119,7 @@ namespace HR_Tool.Controllers
         }
 
         // GET: Competency/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)

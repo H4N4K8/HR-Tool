@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 public class SummaryController : Controller
 {
     private readonly HRDBContext _context;

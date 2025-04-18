@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using HR_Tool.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HR_Tool.Controllers
@@ -13,11 +14,13 @@ namespace HR_Tool.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
