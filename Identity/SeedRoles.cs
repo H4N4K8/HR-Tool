@@ -25,7 +25,7 @@ namespace HR_Tool.Data
 
             // Optional: Create default Admin user
             var adminEmail = "admin@hrtool.com";
-            var adminPassword = "Admin@123";
+            var adminPassword = "REPLACE ME";
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
